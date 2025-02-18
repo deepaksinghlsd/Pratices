@@ -1,0 +1,30 @@
+#navbar{
+    background-color: bisque;
+}
+ul{
+    display: flex;
+    justify-content: space-evenly;
+}
+a {
+    /* background-color: rgb(40, 40, 48); */
+}
+li{
+    list-style-type: none;
+    display: inline;
+    color: brown;
+    
+}
+#flexbox{
+    background-color: blue;
+    height: 200px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#flexbox2{
+    background-color: black;
+    height: 100px;
+    width: 100px;
+
+}

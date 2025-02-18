@@ -1,0 +1,12 @@
+.FirstRow {
+    /* border:2px solid black; */
+    padding: 1px;
+    background-color: rgb(97, 91, 91);
+    width: 100%;
+}
+
+.FrontendHeading{
+    
+    font-weight: bold;
+
+}

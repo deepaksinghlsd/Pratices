@@ -1,0 +1,10 @@
+div{
+    height: 100px;
+    width: 100px;
+    background-color: pink ;
+}
+@media (width : 600px){
+    div{
+        background-color: red;
+    }
+}

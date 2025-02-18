@@ -1,0 +1,25 @@
+div{
+    height: 100px;
+    width: 100px;
+    background-color: white;
+    border: 3px dotted brown;
+    display: inline-block;
+}
+    
+#box1{
+    background-image: url("pic.jpg");
+    background-size: cover;
+}
+/* #box2{
+    position: relative;
+    top: 20px;
+}
+#box3{
+    position: absolute;
+    top: 10px;
+}
+#box4{
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+} */

@@ -1,0 +1,25 @@
+#heading{
+    text-align: center;
+    color: cadetblue;
+    font-weight: 800;
+    font-size: 50px;
+    text-decoration: underline overline;
+}
+#contener{
+    display: inline;
+}
+
+#navbar{
+    display: none;
+    
+    width: full;
+    background-color: #0f1111;
+    display: flex;
+    align-self: start;
+    padding: 200pxl;
+    text-decoration: double;
+}
+#basic{
+    color: white;
+text-decoration:none;
+}

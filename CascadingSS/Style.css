@@ -1,0 +1,56 @@
+/* h1{
+    color :yellow;
+    text-align: center;
+    text-decoration: line-through;
+} */
+#a{
+    color: whitesmoke;
+    text-decoration: none;
+}
+#b{
+    text-decoration: normal;
+}
+#c{
+    text-decoration: bold;
+}
+#d{
+    text-decoration: lighter;
+}
+p{
+    color :brown;
+}
+
+button {
+    color :#00ff0f;
+}
+body{
+    background-color: rgb(227, 193, 193);
+}
+button{
+    background-color: rgb(11, 46, 76);
+}
+p{
+    text-align: start;
+    /* text-align: left;
+    text-align: center; */
+}
+
+a{
+    text-decoration: none;
+}
+#one{
+    font-family: fantasy;
+}
+#two{
+    font-family: initial;
+}
+#x{
+    font-size: 50px;
+}
+#z{
+    font-size: 26px;
+}
+#y{
+    line-height: 15px;
+    text-transform: capitalize;
+}
