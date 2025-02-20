@@ -10,7 +10,10 @@ const Navbar = () => {
       <Link to="/">Home</Link>
       {user ? (
         <>
+          <div className="flex gap-4">
           <Link to="/dashboard">Dashboard</Link>
+          <Link to="/image">Image</Link>
+          </div>
           <button onClick={logout}>Logout</button>
         </>
       ) : (
