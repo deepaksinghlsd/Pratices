@@ -6,7 +6,6 @@ import {
   deleteDoc,
   onSnapshot,
   query,
-  where,
   doc,
   getDocs,
   writeBatch,

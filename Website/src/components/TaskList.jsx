@@ -30,6 +30,8 @@ const TaskList = () => {
     if (newTask.trim() === "" || !user) return;
     try {
       await addTask(newTask, user.uid);
+     console.log("------->addtask",user.uid);
+     
       setNewTask("");
     } catch (error) {
       console.error("Error adding task:", error);
