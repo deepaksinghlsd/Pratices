@@ -1,54 +1,54 @@
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-const cors = require("cors");
+/* eslint-disable no-undef */
+const { onDocumentWritten } = require("firebase-functions/v2/firestore");
+const { initializeApp } = require("firebase-admin/app");
+const { getFirestore } = require("firebase-admin/firestore");
+const { getMessaging } = require("firebase-admin/messaging");
 
-admin.initializeApp();
-const db = admin.firestore();
+// Initialize Firebase Admin
+initializeApp();
 
-const corsHandler = cors({origin: true}); // Allow all origins
+const db = getFirestore();
+const fcm = getMessaging();
 
-exports.sendMessage = functions.https.onRequest((req, res) => {
-  corsHandler(req, res, async () => {
-    if (req.method !== "POST") {
-      return res.status(405).send("Method Not Allowed");
+// Firestore trigger for create/update/delete
+exports.notifyOnUploadChange = onDocumentWritten("uploads/{userId}/{fileId}", async (event) => {
+    // eslint-disable-next-line no-unused-vars
+    const { userId, fileId } = event.params;
+
+    let action;
+    if (!event.data?.before.exists) {
+        action = "created";
+    } else if (!event.data?.after.exists) {
+        action = "deleted";
+    } else {
+        action = "updated";
     }
 
-    const {senderId, recipientId, message} = req.body;
+    const fileData = event.data?.after.exists ? event.data.after.data() : event.data.before.data();
 
-    try {
-      console.log(`Sender: ${senderId}, Recipient: ${recipientId}`);
+    // Get user's FCM token from Firestore
+    const userDoc = await db.collection("users").doc(userId).get();
+    const userToken = userDoc.exists ? userDoc.data().fcmToken : null;
+    if (!userToken) {
+        console.log("No token found for user");
+        return null;
+    }
 
-      const recipientDoc = await db.collection("users").doc(recipientId).get();
-      if (!recipientDoc.exists) {
-        return res.status(404).send("Recipient not found.");
-      }
-
-      const recipientToken = recipientDoc.data().fcmToken;
-
-      const messageRef = await db.collection("messages").add({
-        senderId,
-        recipientId,
-        recipientToken,
-        message,
-        status: "sent",
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      });
-
-      const notification = {
+    // Construct notification payload
+    const payload = {
         notification: {
-          title: "New Message",
-          body: message,
+            title: `File ${action}`,
+            body: `Your file "${fileData.title}" was ${action}`,
         },
-        token: recipientToken,
-      };
+        token: userToken,
+    };
 
-      await admin.messaging().send(notification);
-      await messageRef.update({status: "delivered"});
-
-      res.status(200).send("Message sent and delivered.");
+    // Send push notifications
+    try {
+        await fcm.send(payload);
     } catch (error) {
-      console.error("Error sending message:", error);
-      res.status(500).send(error);
+        console.error("Error sending notification:", error);
     }
-  });
+
+    return null;
 });

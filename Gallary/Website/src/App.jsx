@@ -6,9 +6,15 @@ import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Imageuplod from "./pages/Imageuplod";
+import { getMessaging, onMessage } from "firebase/messaging";
 
 
 const App = () => {
+  const messaging = getMessaging();
+  onMessage(messaging, (payload) => {
+    console.log(payload);
+    alert(`${payload.notification.title}: ${payload.notification.body}`);
+  })
  
   return (
     <AuthProvider>
