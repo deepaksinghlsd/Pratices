@@ -16,7 +16,7 @@ export const requestForToken = async (userId) => {
     });
     
     if (currentToken) {
-      console.log("Current token:", currentToken);
+     
       
       // Save the token to Firestore
       const db = getFirestore();
@@ -24,6 +24,8 @@ export const requestForToken = async (userId) => {
         fcmToken: currentToken,
         tokenLastUpdated: new Date().toISOString()
       }, { merge: true });
+      console.log(currentToken);
+      
       
       return currentToken;
     } else {

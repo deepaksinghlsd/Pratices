@@ -2,6 +2,7 @@ import { useState } from "react";
 import { auth } from "../firebase/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,11 +12,12 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError(""); // Clear previous error
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/");
     } catch (err) {
-      setError("Invalid email or password");
+      setError(err.message); // Display specific Firebase error
     }
   };
 
@@ -23,7 +25,7 @@ const Login = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-4 text-center">Login</h2>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
@@ -41,12 +43,18 @@ const Login = () => {
             className="w-full p-2 border rounded"
             required
           />
-          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          >
             Login
           </button>
         </form>
         <p className="text-center text-gray-600 mt-4">
-          Don't have an account? <a href="/signup" className="text-blue-500">Sign Up</a>
+          Don't have an account?{" "}
+          <NavLink to="/signup" className="text-blue-500 hover:underline">
+            Sign Up
+          </NavLink>
         </p>
       </div>
     </div>

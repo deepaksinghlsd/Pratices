@@ -55,7 +55,7 @@ const ImageUploader = () => {
 
   // Listen for Firebase Cloud Messaging notifications
   useEffect(() => {
-    if (!messaging) return;
+    if (!messaging || notificationPermission !== "granted") return;
 
     const unsubscribe = onMessage(messaging, (payload) => {
       console.log("Message received:", payload);
@@ -77,11 +77,6 @@ const ImageUploader = () => {
         },
       ]);
 
-      // Show a browser notification if granted
-      if (notificationPermission === "granted") {
-        new Notification(title || "File Update", { body });
-      }
-      
       // Refresh gallery when receiving a notification about file changes
       setRefreshGallery(prev => prev + 1);
     });
@@ -123,13 +118,6 @@ const ImageUploader = () => {
         data: { fileName, filePath, eventType: action },
       },
     ]);
-
-    // Show a browser notification if granted
-    if (notificationPermission === "granted") {
-      new Notification(`File ${action}`, { 
-        body: `File ${fileName} was ${action} successfully.` 
-      });
-    }
   };
 
   return (
@@ -146,27 +134,6 @@ const ImageUploader = () => {
           />
         ))}
       </div>
-
-      
-
-      {notificationPermission !== "granted" && (
-        <div className="notification-warning p-4 bg-yellow-100 border-l-4 border-yellow-500 mb-4">
-          <p>Enable notifications for upload alerts</p>
-          <button
-            onClick={() =>
-              Notification.requestPermission().then((permission) => {
-                setNotificationPermission(permission);
-                if (permission === "granted" && currentUserId) {
-                  requestForToken(currentUserId);
-                }
-              })
-            }
-            className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-          >
-            Enable Notifications
-          </button>
-        </div>
-      )}
 
       {/* File upload component */}
       <FileUploader onUploadSuccess={(fileName) => {

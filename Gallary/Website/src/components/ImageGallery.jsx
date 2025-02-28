@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { storage, auth } from "../firebase/firebaseConfig";
+
 import { ref, listAll, getDownloadURL, deleteObject, uploadBytesResumable, getMetadata } from "firebase/storage";
 
 const ImageGallery = ({ refreshTrigger = 0, onDeletePerformed, onUpdatePerformed }) => {
@@ -62,7 +63,7 @@ const ImageGallery = ({ refreshTrigger = 0, onDeletePerformed, onUpdatePerformed
   };
 
   const handleDelete = async (filePath, fileName) => {
-    if (!confirm("Are you sure you want to delete this file?")) return;
+   if (!userId) return;
     
     try {
       await deleteObject(ref(storage, filePath));
@@ -88,7 +89,7 @@ const ImageGallery = ({ refreshTrigger = 0, onDeletePerformed, onUpdatePerformed
       }
       
       if (file.size > maxSize) {
-        alert("File is too large. Maximum size is 10MB.");
+        // alert("File is too large. Maximum size is 10MB.");
         event.target.value = null;
         return;
       }

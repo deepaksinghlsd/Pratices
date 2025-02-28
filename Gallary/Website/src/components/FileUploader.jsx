@@ -25,7 +25,7 @@ const FileUploader = ({ onUploadSuccess }) => {
         maxSizeMB: 1, 
         maxWidthOrHeight: 1920, 
         useWebWorker: true,
-        onProgress: (progress) => console.log(`Compression progress: ${progress}%`)
+        onProgress: (progress) => (`Compression progress: ${progress}%`)
       };
       return await imageCompression(imageFile, options);
     } catch (error) {
