@@ -1,50 +1,79 @@
-// Import Firebase scripts for service worker
-importScripts("https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js");
+// firebase-messaging-sw.js
 
-// Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyCB3g9TgzJpNJiyKaZhqgz5U8a9-hC46Gk",
-    authDomain: "prjdeepak-52038.firebaseapp.com",
-    databaseURL: "https://prjdeepak-52038-default-rtdb.firebaseio.com",
-    projectId: "prjdeepak-52038",
-    storageBucket: "prjdeepak-52038.appspot.com", // FIXED: Incorrect storage URL
-    messagingSenderId: "1008950751588",
-    appId: "1:1008950751588:web:a6764d0da4a132c9604a71",
-    measurementId: "G-7P1L3M8554"
-};
+// Give the service worker access to Firebase Messaging.
+// Note that you can only use Firebase Messaging here. Other Firebase libraries
+// are not available in the service worker.
+importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js');
 
-// Initialize Firebase in the service worker
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
-
-// Handle background push notifications
-messaging.onBackgroundMessage((payload) => {
-    console.log("Received background message: ", payload);
-
-    if (payload && payload.notification) {
-        const { title, body, icon } = payload.notification;
-        
-        self.registration.showNotification(title, {
-            body,
-            icon: icon || "/default-icon.png", // Fallback icon if not provided
-            vibrate: [200, 100, 200], // Vibration pattern for better UX
-            data: payload.data || {}, // Store additional data for interaction
-        });
-    }
+// Initialize the Firebase app in the service worker by passing in
+// your app's Firebase config object.
+// https://firebase.google.com/docs/web/setup#config-object
+firebase.initializeApp({
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+  // If you have measurementId, add it here
+  // measurementId: "YOUR_MEASUREMENT_ID"
 });
 
-// Handle notification click action (optional)
-self.addEventListener("notificationclick", (event) => {
-    event.notification.close();
+// Retrieve an instance of Firebase Messaging so that it can handle background
+// messages.
+const messaging = firebase.messaging();
 
-    // Open a specific page when the notification is clicked
-    event.waitUntil(
-        clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
-            if (clientList.length > 0) {
-                return clientList[0].focus();
-            }
-            return clients.openWindow("/"); // Change URL if needed
-        })
-    );
+// Handle background messages
+messaging.onBackgroundMessage((payload) => {
+  console.log('[firebase-messaging-sw.js] Received background message ', payload);
+  
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: '/firebase-logo.png', // Replace with your app's icon
+    badge: '/badge-icon.png',   // Replace with your badge icon
+    data: payload.data,
+    // Add custom actions if needed
+    actions: [
+      {
+        action: 'open',
+        title: 'Open App'
+      }
+    ]
+  };
+
+  return self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+// Handle notification click
+self.addEventListener('notificationclick', (event) => {
+  console.log('[firebase-messaging-sw.js] Notification click detected');
+  
+  event.notification.close();
+  
+  // This looks to see if the current window is already open and
+  // focuses if it is
+  event.waitUntil(
+    clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    })
+    .then((clientList) => {
+      // Check if there is already a window/tab open with the target URL
+      for (const client of clientList) {
+        // If so, just focus it.
+        if (client.url.includes('/dashboard') && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      
+      // If not, open a new window/tab
+      if (clients.openWindow) {
+        // You can customize this URL to direct to specific pages based on the notification data
+        const fileUrl = event.notification.data?.fileUrl || '/dashboard';
+        return clients.openWindow(fileUrl);
+      }
+    })
+  );
 });

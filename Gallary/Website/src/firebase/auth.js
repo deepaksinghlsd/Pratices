@@ -1,7 +1,6 @@
 import { auth ,db } from "./firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { setDoc,doc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 export const signUp = async (email, password) => {
   
   try {
@@ -36,9 +35,4 @@ export const login = async (email, password) => {
 
 export const logout = async () => {
   return await signOut(auth)
-  .then(()=>{
-    useNavigate("/login")
-  }).catch((error)=>{
-    console.error("Logouterr", error)
-  })
 };
