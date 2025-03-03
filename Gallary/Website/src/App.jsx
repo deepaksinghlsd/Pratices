@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Imageuplod from "./pages/Imageuplod";
+import LocationPage from "./pages/LocationPage";
 import { getMessaging, onMessage } from "firebase/messaging";
 
 
@@ -23,6 +24,7 @@ const App = () => {
         <Routes>
         <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/location" element={<LocationPage />} />
           <Route path="/" element={<ProtectedRoute><Imageuplod /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>

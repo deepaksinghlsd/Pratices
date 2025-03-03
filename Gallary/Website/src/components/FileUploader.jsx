@@ -193,7 +193,7 @@ const FileUploader = ({ onUploadSuccess }) => {
   const fileTypeInfo = getFileTypeInfo();
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg max-w-xl mx-auto mt-6">
+    <div className="p-6 bg-white shadow-lg rounded-lg max-w-4xl mx-auto mt-6">
       <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">Upload Media</h2>
       
       {/* Drag & Drop area */}
