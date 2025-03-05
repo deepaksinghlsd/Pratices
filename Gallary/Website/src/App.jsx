@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Imageuplod from "./pages/Imageuplod";
 import LocationPage from "./pages/LocationPage";
+import GetDirectionBetwwentwoPoints from "./pages/GetDirectionBetwwentwoPoints";
 import { getMessaging, onMessage } from "firebase/messaging";
 
 
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/location" element={<LocationPage />} />
+          <Route path="/dir" element={<GetDirectionBetwwentwoPoints />} />
           <Route path="/" element={<ProtectedRoute><Imageuplod /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>

@@ -8,13 +8,7 @@ export const calculateDistance = https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Methods', 'GET');
 
     try {
-        const {origins, destinations} = req.query;
-        console.log("Origins:", origins);
-        console.log("Destinations:",
-        destinations);
-        console.log(`----request query: ${req.query}`);
-        
-        
+        const {origins, destinations} = req.query; 
         if(!origins || !destinations) {
             throw new Error("Origins and destination are requireds");
         }

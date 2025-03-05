@@ -68,6 +68,8 @@ const LocationPage = () => {
       (result, status) => {
         if (status === "OK") {
           setDirections(result);
+          console.log("Directions:", result);
+          
         } else {
           console.error("Error fetching directions:", status);
         }
@@ -127,6 +129,8 @@ const LocationPage = () => {
       {/* Google Map */}
       <div className="mt-4 h-96">
         <LoadScript googleMapsApiKey={googleMapsApiKey}>
+          console.log(directions);
+          
           <GoogleMap
             center={{ lat: 28.5, lng: 77.1 }} // Default center (change as needed)
             zoom={10}
